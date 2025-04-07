@@ -43,3 +43,7 @@ print(f"\nThe year with the most titles released is: {year_with_most_titles} wit
 print("\n Cleaned data:")
 filled_missing_values = df.isnull().sum()
 print(filled_missing_values)
+
+df.to_csv('netflix_titles_cleaned.csv', index=False)
+
+print("\nCSV exported successfully!")

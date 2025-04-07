@@ -1,9 +1,11 @@
 import pandas as pd
 from analysis_app.models import Media
 
-netflix_data = r'../netflix_titles_top50.csv'
+netflix_data = r'../netflix_titles_cleaned.csv'
 df = pd.read_csv(netflix_data)
 print(df.columns)
+df['date_added'] = df['date_added'].str.strip()  # Clean spaces
+df['date_added'] = pd.to_datetime(df['date_added'], errors='coerce', format='%B %d, %Y')
 
 for index, row in df.iterrows():
     media = Media(
