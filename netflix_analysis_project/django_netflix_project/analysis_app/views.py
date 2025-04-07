@@ -5,10 +5,39 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Media
 from .forms import MediaForm
+from django.db.models import Q
 
 def media_list(request):
+    query = request.GET.get('q', '')
+    type = request.GET.get('type', '')
+    year = request.GET.get('year', '')
+    country = request.GET.get('country', '')
+
     medias = Media.objects.all()
-    return render(request, 'analysis_app/media_list.html', {'medias': medias})
+
+    if query:
+        medias = medias.filter(
+            Q(title__icontains=query) |
+            Q(director__icontains=query) |
+            Q(cast__icontains=query)
+        )
+    
+    if type:
+        medias = medias.filter(type=type)
+
+    if year:
+        medias = medias.filter(release_year=year)
+
+    if country:
+        medias = medias.filter(country=country)
+
+    context = {
+        'medias': medias,
+        'types': Media.objects.values_list('type', flat=True).distinct(),
+        'years': Media.objects.values_list('release_year', flat=True).distinct(),
+        'countries': Media.objects.values_list('country', flat=True).distinct()
+    }
+    return render(request, 'analysis_app/media_list.html', context)
 
 def media_create(request):
     if request.method == "POST":
