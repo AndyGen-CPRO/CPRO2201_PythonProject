@@ -83,6 +83,15 @@
                     {% endfor %}
                 </select>
             </div>
+
+            <div class="col-md-2">
+                <select name="genre" class="form-select">
+                    <option value="">All Genres</option>
+                    {% for g in genres %}
+                        <option value="{{ g }}" {% if request.GET.genre == g %}selected{% endif %}>{{ g }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         
             <div class="col-md-2">
                 <button type="submit" class="btn btn-primary w-100">Filter</button>
